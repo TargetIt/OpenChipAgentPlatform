@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OpenChipAgent Goal",
+  "type": "object",
+  "required": ["id", "title", "done_when"],
+  "properties": {
+    "id": { "type": "string" },
+    "title": { "type": "string" },
+    "description": { "type": "string" },
+    "constraints": { "type": "object" },
+    "done_when": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "max_retries": { "type": "integer", "minimum": 0 },
+    "human_review_required": { "type": "boolean" }
+  }
+}
+

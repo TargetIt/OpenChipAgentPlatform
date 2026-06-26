@@ -18,9 +18,14 @@ Natural language specification
 
 The project starts from research. The `research/` directory records the initial landscape survey, product concept, architecture proposal, and MVP roadmap.
 
+The current practical direction is harness-first: build a chip-design-specific harness that can be used by existing general-purpose coding agents such as OpenCode, Claude Code, Codex, Cursor, or Aider.
+
 ## Repository Structure
 
 ```text
+requirements/
+  original-requirement.md
+
 research/
   README.md
   01-landscape-survey.md
@@ -28,6 +33,25 @@ research/
   03-system-architecture.md
   04-mvp-roadmap.md
   05-risks-and-open-questions.md
+
+brainstorm/
+  01-harness-hermes-loop-goal.md
+  02-open-agent-base-for-chip-design.md
+  03-deep-opportunity-map.md
+
+harness/
+  README.md
+  00-overview.md
+  01-why-harness-first.md
+  04-goal-runner.md
+  05-loop-engineering.md
+  06-hermes-style-skill-memory.md
+  10-mvp-rtl-goal-runner.md
+  adapters/
+  workflows/
+  schemas/
+  templates/
+  skills/
 ```
 
 ## Current Scope
@@ -47,4 +71,3 @@ small natural language spec
 ```
 
 After that is stable, the platform can add OpenROAD/OpenLane-based physical design.
-

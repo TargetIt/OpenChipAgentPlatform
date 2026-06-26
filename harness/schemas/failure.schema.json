@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OpenChipAgent Failure",
+  "type": "object",
+  "required": ["class", "evidence", "stage"],
+  "properties": {
+    "stage": {
+      "type": "string",
+      "enum": ["spec", "rtl", "lint", "simulation", "synthesis", "pnr", "report"]
+    },
+    "class": { "type": "string" },
+    "evidence": { "type": "string" },
+    "source_location": { "type": "string" },
+    "safe_to_auto_repair": { "type": "boolean" },
+    "recommended_action": { "type": "string" }
+  }
+}
+

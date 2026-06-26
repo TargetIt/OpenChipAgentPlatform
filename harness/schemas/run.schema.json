@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OpenChipAgent Run",
+  "type": "object",
+  "required": ["run_id", "goal_id", "status", "artifacts", "failures"],
+  "properties": {
+    "run_id": { "type": "string" },
+    "goal_id": { "type": "string" },
+    "status": {
+      "type": "string",
+      "enum": ["running", "passed", "failed", "blocked", "needs_review"]
+    },
+    "tool_versions": { "type": "object" },
+    "commands": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "artifacts": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "failures": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "patches": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}
+
