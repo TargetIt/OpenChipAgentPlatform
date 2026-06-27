@@ -3,18 +3,46 @@
 OpenChipAgent Loop 的完整执行链路如下：
 
 ```text
-用户目标
+项目探测
+  -> 用户目标
   -> 结构化规格
   -> 验证计划
   -> 生成验证资产
   -> 执行 EDA 工具
   -> 读取证据
+  -> 证据一致性检查
   -> 失败分类
   -> 修复/补充
   -> 回归验证
   -> 出口判定
   -> 报告/沉淀经验
 ```
+
+## 0. Project Probe Loop：先理解项目和环境
+
+陌生项目不能直接进入生成或修复。必须先建立项目模型：
+
+```text
+repo
+  -> detect phases
+  -> detect RTL/testbench/scripts/configs/reports/artifacts
+  -> detect tools and licenses
+  -> detect existing stale artifacts
+  -> detect known reports and run history
+  -> produce project model
+```
+
+输出应包括：
+
+- 项目阶段：spec、RTL、sim、synthesis、PnR、physical verification、GDS；
+- 每阶段入口脚本；
+- 每阶段所需工具；
+- 每阶段关键产物；
+- 当前可执行能力；
+- 已存在报告是否来自当前 run；
+- 明确哪些阶段会被 skipped。
+
+`openPwmChipFlow` 演练证明：如果没有 Project Probe，Agent 很容易把“缺工具导致跳过”误判成“流程完成”。
 
 ## 1. Goal Loop：把自然语言目标变成可执行目标
 
@@ -114,6 +142,31 @@ verification plan
 
 Agent 不允许只说“应该通过”，必须跑工具。
 
+## 4.5 Capability Gate：跳过不是通过
+
+每个阶段执行前必须判断：
+
+```text
+required input exists?
+required tool exists?
+required license/docker/pdk exists?
+required config exists?
+```
+
+如果能力缺失：
+
+```text
+status = blocked / needs_tooling / skipped
+```
+
+不能写成：
+
+```text
+status = passed
+```
+
+对于芯片工程，`skipped` 是一个正式状态，必须传递到最终报告。
+
 ## 5. Evidence Loop：读取证据
 
 工具跑完后，Agent 要读结果：
@@ -140,6 +193,38 @@ log
 - synthesis warning。
 
 关键点：Agent 要学会从海量 log 中定位第一根因，而不是只看最后一行。
+
+## 5.5 Evidence Consistency Loop：检查证据是否互相矛盾
+
+工具证据不仅要存在，还要一致。
+
+必须检查：
+
+- exit code 与报告结论是否一致；
+- 单项测试结果与总体结果是否一致；
+- log 中是否存在 FAIL / ERROR / WARNING；
+- 是否有 skipped 阶段被写成完成；
+- 旧 artifact 是否被当成本次 run 结果；
+- requirement 与 design spec 是否冲突；
+- coverage/DRC/LVS/GDS 结论是否有对应原始报告。
+
+典型规则：
+
+```text
+report has FAIL marker and ALL PASSED marker
+  -> evidence_conflict
+  -> needs_review
+
+required stage skipped
+  -> not passed
+  -> needs_tooling or blocked
+
+requirements conflict with design spec
+  -> spec_ambiguity
+  -> human review
+```
+
+这是从 `openPwmChipFlow` 演练中得到的重要修正。
 
 ## 6. Failure Classification Loop：失败分类
 
@@ -234,8 +319,25 @@ done?
 - `blocked`
 - `needs_review`
 - `in_progress`
+- `skipped`
+- `needs_tooling`
 
 企业客户不接受“模糊完成”，所以状态必须明确。
+
+## 9.5 Evidence Critic Loop：独立检查 Done Condition
+
+执行 Agent 完成一轮后，需要一个 Evidence Critic 检查：
+
+- goal 是否被满足；
+- required stage 是否真的执行；
+- skipped 是否被误报为 pass；
+- report 是否存在内部矛盾；
+- spec 是否存在上游冲突；
+- 修复后是否 rerun；
+- artifact 是否来自本次 run；
+- human review gate 是否被绕过。
+
+这可以是独立 Agent，也可以是同一 Agent 的独立模式，但它必须使用不同的检查清单。
 
 ## 10. Learning Loop：经验沉淀
 

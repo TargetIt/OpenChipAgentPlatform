@@ -44,11 +44,11 @@
           "id": { "type": "string" },
           "stage": {
             "type": "string",
-            "enum": ["spec", "rtl", "lint", "simulation", "synthesis", "report"]
+            "enum": ["probe", "spec", "rtl", "lint", "simulation", "synthesis", "pnr", "physical_verification", "gds", "report"]
           },
           "status": {
             "type": "string",
-            "enum": ["passed", "failed", "skipped", "needs_review"]
+            "enum": ["passed", "failed", "skipped", "blocked", "needs_tooling", "needs_review", "not_run"]
           },
           "required": { "type": "boolean" },
           "evidence": { "type": "array", "items": { "type": "string" } }

@@ -57,7 +57,7 @@
           "id": { "type": "string", "minLength": 1 },
           "stage": {
             "type": "string",
-            "enum": ["spec", "rtl", "lint", "simulation", "synthesis", "report"]
+            "enum": ["probe", "spec", "rtl", "lint", "simulation", "synthesis", "pnr", "physical_verification", "gds", "report"]
           },
           "description": { "type": "string" },
           "required": { "type": "boolean" }

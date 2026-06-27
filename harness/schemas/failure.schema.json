@@ -16,7 +16,7 @@
     "id": { "type": "string", "minLength": 1 },
     "stage": {
       "type": "string",
-      "enum": ["spec", "rtl", "lint", "simulation", "synthesis", "pnr", "report"]
+      "enum": ["probe", "spec", "rtl", "lint", "simulation", "synthesis", "pnr", "physical_verification", "gds", "report"]
     },
     "class": {
       "type": "string",
@@ -38,6 +38,10 @@
         "handshake_protocol_violation",
         "latency_mismatch",
         "tool_configuration_error",
+        "missing_tool",
+        "skipped_required_stage",
+        "evidence_conflict",
+        "stale_artifact",
         "unknown"
       ]
     },

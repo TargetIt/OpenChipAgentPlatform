@@ -37,14 +37,17 @@ AI Agent 能在 Harness 约束下，完成一个小模块的验证闭环。
 ## MVP 执行链路
 
 ```text
-输入 RTL / spec
+输入项目 / RTL / spec
+  -> project probe
   -> 生成结构化 spec
   -> 生成验证计划
   -> 生成 cocotb testbench
   -> 生成 reference model
+  -> capability gate
   -> 运行 Verilator
   -> 运行 simulation
   -> 读取 log
+  -> evidence consistency check
   -> 分类失败
   -> 修 testbench 或建议 RTL 修复
   -> 回归
@@ -71,9 +74,12 @@ AI Agent 能在 Harness 约束下，完成一个小模块的验证闭环。
 
 - 有 `goal.json`；
 - 有 `spec.md`；
+- 有 project probe 结果；
+- 有工具能力检查；
 - 有生成的 testbench；
 - 有真实工具命令记录；
 - 有 log；
+- 没有证据冲突；
 - 有失败分类；
 - 有修复记录；
 - 有回归记录；
@@ -135,8 +141,27 @@ Skill Memory
 3. Agent 无法定位 log 根因。
 4. Agent 修了一个 case，破坏其他 case。
 5. Agent 没有保留足够证据，工程师无法信任结果。
+6. Agent 把 skipped 阶段当成 passed。
+7. Agent 把旧报告当成本次 run 结果。
+8. Agent 没有发现需求和设计规格冲突。
 
 MVP 必须围绕这些风险设计，而不是只追求 demo 看起来很顺。
+
+## 从 openPwmChipFlow 得到的 MVP 修正
+
+`openPwmChipFlow` 说明，MVP 即使只做小 PWM，也必须处理：
+
+- 环境工具缺失；
+- 阶段跳过；
+- 报告内部矛盾；
+- 需求与规格冲突；
+- 端到端 flow 的阶段状态传播。
+
+所以 MVP 的最低要求不是“跑一个 testbench”，而是：
+
+```text
+能可靠地区分 passed / failed / skipped / blocked / needs_review。
+```
 
 ## 第一版产品口号
 

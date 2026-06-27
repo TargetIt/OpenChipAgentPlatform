@@ -56,13 +56,41 @@ Each artifact must record:
 
 For the first RTL MVP, use this order:
 
-1. spec completeness check;
-2. Verilator lint;
-3. cocotb simulation;
-4. Yosys synthesis;
-5. final report check.
+1. project probe and capability check;
+2. spec completeness and consistency check;
+3. Verilator lint;
+4. cocotb simulation;
+5. Yosys synthesis;
+6. evidence consistency check;
+7. final report check.
 
 After any RTL patch caused by synthesis, rerun lint and simulation before declaring synthesis fixed.
+
+## Stage Status Rule
+
+Every required stage must record one explicit status:
+
+- `passed`;
+- `failed`;
+- `skipped`;
+- `blocked`;
+- `needs_tooling`;
+- `needs_review`;
+- `not_run`.
+
+`skipped`, `blocked`, and `needs_tooling` are not success states. A final report must not claim `passed` if any required stage is skipped or blocked.
+
+## Evidence Consistency Rule
+
+Before a run can pass, the harness must check:
+
+- command exit code vs. report conclusion;
+- per-test results vs. summary result;
+- presence of FAIL/ERROR markers in logs;
+- skipped stages vs. final status;
+- stale artifacts vs. current run id;
+- requirement/spec contradictions;
+- whether every final claim links to an artifact or log.
 
 ## Reproducibility Rule
 
