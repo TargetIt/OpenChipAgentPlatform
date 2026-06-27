@@ -7,10 +7,12 @@ OpenCode can be used as a host runtime for OpenChipAgent Harness.
 An OpenCode session should read:
 
 1. `harness/README.md`
-2. `harness/04-goal-runner.md`
-3. `harness/05-loop-engineering.md`
-4. the relevant workflow under `harness/workflows/`
-5. the relevant skills under `harness/skills/`
+2. `harness/02-run-layout.md`
+3. `harness/03-human-review-gates.md`
+4. `harness/04-goal-runner.md`
+5. `harness/05-loop-engineering.md`
+6. the relevant workflow under `harness/workflows/`
+7. the relevant skills under `harness/skills/`
 
 ## Usage Pattern
 
@@ -32,3 +34,4 @@ The agent should:
 - patch and rerun;
 - write final report.
 
+It should also keep `metadata/run.json` current enough for another agent to resume the run.

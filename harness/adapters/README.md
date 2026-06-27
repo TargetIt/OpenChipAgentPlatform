@@ -9,7 +9,8 @@ Supported host targets:
 - OpenCode;
 - Claude Code;
 - Codex;
-- later Cursor and Aider.
+- Cursor;
+- Aider.
 
 Each adapter should explain:
 
@@ -19,3 +20,4 @@ Each adapter should explain:
 - how to preserve artifacts;
 - what the host-specific limitations are.
 
+All adapters should point agents at `harness/02-run-layout.md` and `harness/03-human-review-gates.md`.

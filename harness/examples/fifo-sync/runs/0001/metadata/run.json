@@ -1,0 +1,122 @@
+{
+  "run_id": "0001",
+  "goal_id": "fifo-sync",
+  "status": "needs_review",
+  "started_at": "example",
+  "ended_at": null,
+  "tool_versions": {
+    "verilator": "not-run-in-example",
+    "cocotb": "not-run-in-example",
+    "yosys": "not-run-in-example"
+  },
+  "commands": [
+    {
+      "id": "cmd-verilator-lint",
+      "stage": "lint",
+      "tool": "verilator",
+      "command": "verilator --lint-only -Wall rtl/fifo_sync.sv",
+      "cwd": "harness/examples/fifo-sync/runs/0001",
+      "started_at": null,
+      "ended_at": null,
+      "exit_code": null,
+      "stdout": "logs/verilator-lint.stdout.log",
+      "stderr": "logs/verilator-lint.stderr.log",
+      "required_for_success": true
+    },
+    {
+      "id": "cmd-cocotb",
+      "stage": "simulation",
+      "tool": "cocotb",
+      "command": "make -C tb MODULE=test_fifo_sync TOPLEVEL=fifo_sync TOPLEVEL_LANG=verilog VERILOG_SOURCES=$(pwd)/rtl/fifo_sync.sv",
+      "cwd": "harness/examples/fifo-sync/runs/0001",
+      "started_at": null,
+      "ended_at": null,
+      "exit_code": null,
+      "stdout": "logs/cocotb.stdout.log",
+      "stderr": "logs/cocotb.stderr.log",
+      "required_for_success": true
+    },
+    {
+      "id": "cmd-yosys",
+      "stage": "synthesis",
+      "tool": "yosys",
+      "command": "yosys -q -s scripts/synth.ys",
+      "cwd": "harness/examples/fifo-sync/runs/0001",
+      "started_at": null,
+      "ended_at": null,
+      "exit_code": null,
+      "stdout": "logs/yosys.stdout.log",
+      "stderr": "logs/yosys.stderr.log",
+      "required_for_success": true
+    }
+  ],
+  "checks": [
+    {
+      "id": "spec-complete",
+      "stage": "spec",
+      "status": "passed",
+      "required": true,
+      "evidence": ["spec/spec.md"]
+    },
+    {
+      "id": "tool-checks",
+      "stage": "report",
+      "status": "needs_review",
+      "required": true,
+      "evidence": ["Example commands are recorded but not executed in this archived example."]
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "goal.json",
+      "type": "goal",
+      "stage": "spec",
+      "produced_by": null,
+      "required": true,
+      "checksum": null
+    },
+    {
+      "path": "spec/spec.md",
+      "type": "spec",
+      "stage": "spec",
+      "produced_by": null,
+      "required": true,
+      "checksum": null
+    },
+    {
+      "path": "rtl/fifo_sync.sv",
+      "type": "rtl",
+      "stage": "rtl",
+      "produced_by": null,
+      "required": true,
+      "checksum": null
+    },
+    {
+      "path": "tb/test_fifo_sync.py",
+      "type": "testbench",
+      "stage": "simulation",
+      "produced_by": null,
+      "required": true,
+      "checksum": null
+    },
+    {
+      "path": "scripts/synth.ys",
+      "type": "script",
+      "stage": "synthesis",
+      "produced_by": null,
+      "required": true,
+      "checksum": null
+    },
+    {
+      "path": "reports/final.md",
+      "type": "report",
+      "stage": "report",
+      "produced_by": null,
+      "required": true,
+      "checksum": null
+    }
+  ],
+  "failures": [],
+  "repairs": [],
+  "final_report": "reports/final.md"
+}

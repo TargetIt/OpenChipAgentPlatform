@@ -73,3 +73,16 @@ Rewrite into conservative synthesizable Verilog/SystemVerilog subset.
 
 Start with manually curated skill files. Add automatic skill extraction only after the loops and artifacts are stable.
 
+## Skill File Contract
+
+Each reusable skill should provide:
+
+- trigger patterns;
+- diagnosis steps;
+- safe repairs;
+- forbidden repairs;
+- validation commands;
+- examples and counterexamples when useful;
+- a success metric.
+
+The machine-readable version should follow `schemas/skill.schema.json`.

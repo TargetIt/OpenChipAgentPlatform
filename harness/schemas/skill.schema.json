@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OpenChipAgent Skill",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "title", "triggers", "diagnosis", "safe_repairs", "forbidden_repairs", "validation"],
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "triggers": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "diagnosis": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "safe_repairs": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "forbidden_repairs": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "validation": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "success_metric": { "type": "string" }
+  }
+}

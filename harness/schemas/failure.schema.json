@@ -2,17 +2,64 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "OpenChipAgent Failure",
   "type": "object",
-  "required": ["class", "evidence", "stage"],
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "stage",
+    "class",
+    "severity",
+    "evidence",
+    "safe_to_auto_repair",
+    "recommended_action"
+  ],
   "properties": {
+    "id": { "type": "string", "minLength": 1 },
     "stage": {
       "type": "string",
       "enum": ["spec", "rtl", "lint", "simulation", "synthesis", "pnr", "report"]
     },
-    "class": { "type": "string" },
-    "evidence": { "type": "string" },
+    "class": {
+      "type": "string",
+      "enum": [
+        "missing_requirement",
+        "syntax_error",
+        "undeclared_signal",
+        "width_mismatch",
+        "multiple_drivers",
+        "inferred_latch",
+        "unsupported_construct",
+        "non_synthesizable_construct",
+        "combinational_loop",
+        "simulation_mismatch",
+        "testbench_bug",
+        "reference_model_bug",
+        "spec_ambiguity",
+        "reset_timing_issue",
+        "handshake_protocol_violation",
+        "latency_mismatch",
+        "tool_configuration_error",
+        "unknown"
+      ]
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["info", "warning", "error", "blocker"]
+    },
+    "tool": { "type": "string" },
+    "command_id": { "type": "string" },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" }
+    },
     "source_location": { "type": "string" },
+    "attempt": { "type": "integer", "minimum": 0 },
+    "confidence": {
+      "type": "string",
+      "enum": ["low", "medium", "high"]
+    },
     "safe_to_auto_repair": { "type": "boolean" },
-    "recommended_action": { "type": "string" }
+    "recommended_action": { "type": "string", "minLength": 1 },
+    "requires_user_input": { "type": "boolean" }
   }
 }
-

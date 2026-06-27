@@ -33,6 +33,8 @@ Initial examples:
 - edge detector;
 - toy matrix multiply accelerator.
 
+The first archived example is `harness/examples/fifo-sync/`.
+
 ## Completion Checks
 
 A run is successful when:
@@ -43,6 +45,7 @@ A run is successful when:
 - Verilator lint passes;
 - simulation passes;
 - Yosys synthesis passes;
+- `metadata/run.json` records commands, checks, artifacts, failures, and repairs;
 - final report exists.
 
 ## Success Metric
@@ -66,4 +69,3 @@ all failures classified
 - analog/mixed-signal;
 - production signoff;
 - full timing closure.
-

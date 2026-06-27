@@ -7,7 +7,7 @@ Claude Code can be used as a host runtime for OpenChipAgent Harness.
 Use a goal-oriented prompt and explicitly point Claude Code at the harness files.
 
 ```text
-Read harness/README.md and harness/10-mvp-rtl-goal-runner.md.
+Read harness/README.md, harness/02-run-layout.md, harness/03-human-review-gates.md, and harness/10-mvp-rtl-goal-runner.md.
 Use the RTL Goal Runner workflow.
 Do not stop until the done checks pass or a blocker is clearly reported.
 ```
@@ -32,5 +32,5 @@ Claude Code should preserve:
 - commands;
 - logs;
 - patches;
+- metadata/run.json;
 - report.
-

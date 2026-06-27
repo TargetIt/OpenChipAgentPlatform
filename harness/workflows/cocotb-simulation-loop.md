@@ -15,6 +15,16 @@ generate tests
   -> rerun
 ```
 
+## Default Command
+
+```bash
+make -C tb MODULE=<module> TOPLEVEL=<module> \
+  > logs/cocotb.stdout.log \
+  2> logs/cocotb.stderr.log
+```
+
+Record simulator, random seed, waveform path, and test selection in `metadata/run.json`.
+
 ## Mismatch Classification
 
 - RTL bug;
@@ -28,5 +38,14 @@ generate tests
 
 ## Done Condition
 
-All required tests pass and the final report lists test coverage limitations.
+All required tests pass, deterministic seed reproduction is recorded, and the final report lists coverage limitations.
 
+## Minimum Test Expectations
+
+For the RTL MVP, the testbench should include:
+
+- reset behavior;
+- one normal transaction;
+- boundary conditions;
+- backpressure or stall behavior when the protocol has flow control;
+- at least one randomized sequence with recorded seed.

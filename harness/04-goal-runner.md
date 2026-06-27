@@ -12,6 +12,8 @@ For chip design, goals must be objective. A goal should include:
 - max retries;
 - human review gates.
 
+The machine-readable goal should follow `schemas/goal.schema.json`. The run output should follow `schemas/run.schema.json`.
+
 ## Example Goal
 
 ```text
@@ -43,6 +45,20 @@ The agent may stop only when one of these is true:
 3. The retry budget is exhausted and failures are clearly classified.
 4. A human approval gate is reached.
 
+## Required Run Evidence
+
+Each goal run must preserve:
+
+- `goal.json`;
+- structured spec;
+- generated or modified RTL;
+- testbench and reference model;
+- raw tool logs;
+- command records;
+- failure classifications;
+- repair actions;
+- final report.
+
 ## Bad Goal
 
 ```text
@@ -57,4 +73,3 @@ This is too vague.
 Generate a synchronous ready/valid FIFO with width=32 and depth=16.
 The design must pass Verilator lint, cocotb tests for reset/full/empty/backpressure, and Yosys synthesis.
 ```
-

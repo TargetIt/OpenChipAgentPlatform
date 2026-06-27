@@ -1,0 +1,68 @@
+{
+  "id": "fifo-sync",
+  "title": "Synchronous ready/valid FIFO",
+  "description": "Generate a small synchronous FIFO with ready/valid push and pop sides, explicit full and empty flags, and conservative synthesizable SystemVerilog.",
+  "target": {
+    "module_name": "fifo_sync",
+    "language": "systemverilog",
+    "top_file": "rtl/fifo_sync.sv"
+  },
+  "constraints": {
+    "clock": "single rising-edge clk",
+    "reset": "synchronous active-high rst",
+    "interfaces": [
+      "push valid/ready input side",
+      "pop valid/ready output side"
+    ],
+    "latency": "first pushed value becomes visible on dout when FIFO is non-empty",
+    "synthesis_subset": "conservative SystemVerilog accepted by Verilator and Yosys"
+  },
+  "acceptance_checks": [
+    {
+      "id": "spec-complete",
+      "stage": "spec",
+      "description": "Structured spec has no open questions.",
+      "required": true
+    },
+    {
+      "id": "verilator-lint",
+      "stage": "lint",
+      "description": "Verilator lint exits successfully.",
+      "required": true
+    },
+    {
+      "id": "cocotb-sim",
+      "stage": "simulation",
+      "description": "cocotb directed and randomized tests pass.",
+      "required": true
+    },
+    {
+      "id": "yosys-synth",
+      "stage": "synthesis",
+      "description": "Yosys synthesis and check pass.",
+      "required": true
+    },
+    {
+      "id": "final-report",
+      "stage": "report",
+      "description": "Final report records artifacts, commands, evidence, and risks.",
+      "required": true
+    }
+  ],
+  "done_when": [
+    "spec/spec.md is complete",
+    "rtl/fifo_sync.sv exists",
+    "tb/test_fifo_sync.py exists",
+    "Verilator lint passes",
+    "cocotb simulation passes",
+    "Yosys synthesis passes",
+    "reports/final.md summarizes artifacts, fixes, and risks"
+  ],
+  "max_retries": 3,
+  "human_review_gates": [
+    "changing interface ports",
+    "changing reset semantics",
+    "weakening FIFO ordering tests",
+    "suppressing tool warnings"
+  ]
+}

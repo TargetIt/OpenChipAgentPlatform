@@ -2,31 +2,71 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "OpenChipAgent Run",
   "type": "object",
-  "required": ["run_id", "goal_id", "status", "artifacts", "failures"],
+  "additionalProperties": false,
+  "required": [
+    "run_id",
+    "goal_id",
+    "status",
+    "started_at",
+    "ended_at",
+    "tool_versions",
+    "commands",
+    "checks",
+    "artifacts",
+    "failures",
+    "repairs",
+    "final_report"
+  ],
   "properties": {
-    "run_id": { "type": "string" },
-    "goal_id": { "type": "string" },
+    "run_id": { "type": "string", "minLength": 1 },
+    "goal_id": { "type": "string", "minLength": 1 },
     "status": {
       "type": "string",
       "enum": ["running", "passed", "failed", "blocked", "needs_review"]
     },
-    "tool_versions": { "type": "object" },
+    "started_at": { "type": "string" },
+    "ended_at": { "type": ["string", "null"] },
+    "tool_versions": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    },
     "commands": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": { "$ref": "command.schema.json" }
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "stage", "status", "required"],
+        "properties": {
+          "id": { "type": "string" },
+          "stage": {
+            "type": "string",
+            "enum": ["spec", "rtl", "lint", "simulation", "synthesis", "report"]
+          },
+          "status": {
+            "type": "string",
+            "enum": ["passed", "failed", "skipped", "needs_review"]
+          },
+          "required": { "type": "boolean" },
+          "evidence": { "type": "array", "items": { "type": "string" } }
+        }
+      }
     },
     "artifacts": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": { "$ref": "artifact.schema.json" }
     },
     "failures": {
       "type": "array",
-      "items": { "type": "object" }
+      "items": { "$ref": "failure.schema.json" }
     },
-    "patches": {
+    "repairs": {
       "type": "array",
-      "items": { "type": "string" }
-    }
+      "items": { "$ref": "repair-action.schema.json" }
+    },
+    "final_report": { "type": "string" }
   }
 }
-

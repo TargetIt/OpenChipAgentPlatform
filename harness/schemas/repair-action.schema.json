@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OpenChipAgent Repair Action",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "failure_id", "stage", "description", "files_changed", "validation_checks"],
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "failure_id": { "type": "string", "minLength": 1 },
+    "stage": {
+      "type": "string",
+      "enum": ["spec", "rtl", "lint", "simulation", "synthesis", "pnr", "report"]
+    },
+    "description": { "type": "string", "minLength": 1 },
+    "files_changed": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "human_review_required": { "type": "boolean" },
+    "validation_checks": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

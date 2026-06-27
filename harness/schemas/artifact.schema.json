@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OpenChipAgent Artifact",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["path", "type", "stage", "required"],
+  "properties": {
+    "path": { "type": "string", "minLength": 1 },
+    "type": {
+      "type": "string",
+      "enum": ["goal", "spec", "rtl", "testbench", "script", "log", "metadata", "report", "waveform", "other"]
+    },
+    "stage": {
+      "type": "string",
+      "enum": ["spec", "rtl", "lint", "simulation", "synthesis", "pnr", "report"]
+    },
+    "produced_by": { "type": ["string", "null"] },
+    "required": { "type": "boolean" },
+    "checksum": { "type": ["string", "null"] }
+  }
+}

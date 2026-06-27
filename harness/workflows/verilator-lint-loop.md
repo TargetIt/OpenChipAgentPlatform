@@ -14,6 +14,16 @@ run Verilator
   -> rerun
 ```
 
+## Default Command
+
+```bash
+verilator --lint-only -Wall rtl/<module>.sv \
+  > logs/verilator-lint.stdout.log \
+  2> logs/verilator-lint.stderr.log
+```
+
+If the project has include directories or multiple RTL files, add them explicitly and record the final command in `metadata/run.json`.
+
 ## Common Failure Classes
 
 - syntax error;
@@ -27,5 +37,4 @@ run Verilator
 
 ## Done Condition
 
-Verilator lint exits successfully, or remaining warnings are documented and accepted by a human review gate.
-
+Verilator exits successfully with no unreviewed warnings. Suppressed or accepted warnings must be documented as human review gates.

@@ -2,31 +2,40 @@
 
 ## Goal
 
-TODO
+- Goal ID:
+- Run ID:
+- Status:
 
-## Status
+## Summary
 
-TODO
+State whether the run passed, failed, was blocked, or needs review.
 
 ## Artifacts
 
-TODO
+| Type | Path | Required | Notes |
+| --- | --- | --- | --- |
 
 ## Tool Results
 
-- Verilator:
-- Simulation:
-- Yosys:
+| Stage | Command ID | Status | Evidence |
+| --- | --- | --- | --- |
+| Lint |  |  |  |
+| Simulation |  |  |  |
+| Synthesis |  |  |  |
 
 ## Failures and Fixes
 
-TODO
+| Failure | Evidence | Repair | Validation |
+| --- | --- | --- | --- |
+
+## Human Review Gates
+
+List any review gates reached, including accepted warnings or requirements changes.
 
 ## Remaining Risks
 
-TODO
+List test coverage limits, tool limitations, unverified assumptions, and production-readiness gaps.
 
 ## Reproduction
 
-TODO
-
+Provide exact commands or point to `metadata/run.json` command records.

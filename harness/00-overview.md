@@ -59,3 +59,14 @@ Every agent run should produce evidence:
 
 The platform should not rely on agent confidence. It should rely on reproducible artifacts.
 
+## Execution Backbone
+
+The first execution backbone is:
+
+1. create a canonical run directory;
+2. record a structured goal;
+3. produce spec, RTL, testbench, scripts, logs, metadata, and final report;
+4. classify every failure with evidence;
+5. rerun invalidated checks after every repair.
+
+See `02-run-layout.md` and `03-human-review-gates.md` for the first concrete contracts.
