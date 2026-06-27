@@ -36,7 +36,7 @@ requirements
 - `phase6_gds/run_gds.sh`
 - `scripts/health_check.sh`
 
-## 3. 实际健康检查
+## 3. 第一轮健康检查
 
 执行：
 
@@ -60,15 +60,53 @@ Loop 结论：
 
 这说明 Loop 必须把 `skipped` 和 `passed` 分开。
 
-## 4. 发现的问题一：工具能力缺失不能被吞掉
+## 4. 补工具后的真实执行
+
+为了验证 Loop 不是只停留在文档层，我在本地补了最小可用的 Icarus Verilog 工具链：
+
+```text
+/Users/jiuri/tools/iverilog/bin/iverilog
+/Users/jiuri/tools/iverilog/bin/vvp
+```
+
+重新执行：
+
+```bash
+PATH=/Users/jiuri/tools/iverilog/bin:$PATH bash scripts/health_check.sh
+```
+
+结果变为：
+
+```text
+PASS=20 FAIL=0
+simulation smoke test passed
+```
+
+正式执行 Phase 2：
+
+```bash
+PATH=/Users/jiuri/tools/iverilog/bin:$PATH bash phase2_sim/run_sim.sh
+```
+
+结果：
+
+```text
+6/6 test cases passed
+raw PASS assertions = 7
+raw FAIL assertions = 0
+wave.vcd generated
+```
+
+这说明 RTL 仿真阶段可以通过真实证据闭环。
+
+## 5. 发现的问题一：工具能力缺失不能被吞掉
 
 `run_all.sh` 在缺少工具时会跳过：
 
-- `iverilog` 缺失时跳过仿真；
 - Docker 缺失时跳过综合和 PnR；
 - Phase 3/4 未完成时跳过物理验证和 GDS。
 
-但脚本最后仍打印“全流程执行完毕”。
+补齐 `iverilog` 后，仿真不再跳过；但 Docker/OpenLane 仍缺失，所以 Phase 3 到 Phase 6 仍不能执行。原脚本最后仍打印“全流程执行完毕”。
 
 对人类学习项目来说这可以接受，但对 Agent Loop 来说不够严格。
 
@@ -80,7 +118,9 @@ required stage skipped
   -> not passed
 ```
 
-## 5. 发现的问题二：报告证据冲突
+我已在 `openPwmChipFlow` 中把 `run_all.sh` 改为部分完成时返回非零状态，并打印跳过阶段数量。
+
+## 6. 发现的问题二：报告证据冲突
 
 `phase2_sim/test_report.md` 中存在：
 
@@ -106,7 +146,9 @@ report contains both fail marker and all-passed marker
 
 不能只看最终一句 `ALL TESTS PASSED`。
 
-## 6. 发现的问题三：需求和规格不一致
+我已在 `openPwmChipFlow` 中修复 `phase2_sim/run_sim.sh`，使报告按每个 `[TEST n]` 区间解析 PASS/FAIL，并把“用例通过数”和“原始 PASS 断言数”分开。
+
+## 7. 发现的问题三：需求和规格不一致
 
 `phase0_spec/requirements.md` 写：
 
@@ -130,7 +172,9 @@ requirements conflict with design spec
   -> human review before generating or modifying tests
 ```
 
-## 7. 发现的问题四：当前 Loop 偏前端验证，不够覆盖端到端 chip flow
+我已在 `openPwmChipFlow` 中把需求改成 `duty/256`，即 0/256 到 255/256，避免把当前极简 RTL 误描述成支持真正 100% 占空比。
+
+## 8. 发现的问题四：当前 Loop 偏前端验证，不够覆盖端到端 chip flow
 
 原始 Loop 更偏：
 
@@ -163,7 +207,7 @@ spec -> RTL -> sim -> synthesis -> PnR -> DRC/LVS -> GDS delivery
 - pass/fail/skip/block status；
 - evidence consistency check。
 
-## 8. 对 Loop 的修改建议
+## 9. 对 Loop 的修改建议
 
 ### 增加 Project Probe Loop
 
@@ -228,19 +272,13 @@ Spec
   -> GDS Delivery
 ```
 
-## 9. 本次演练结论
+## 10. 本次演练结论
 
-`openPwmChipFlow` 证明当前 Loop 的方向正确，但还不够严格。
+`openPwmChipFlow` 证明当前 Loop 的方向正确，但必须把执行证据做成产品的一等公民。
 
-必须新增：
+这次演练已经形成两类产物：
 
-- Project Probe；
-- Capability Gate；
-- Evidence Consistency Check；
-- Stage State Machine；
-- Evidence Critic；
-- skipped/blocked 状态传播；
-- spec conflict detection；
-- stale artifact detection。
+1. `OpenChipAgentPlatform` 中的 Loop/Harness 规则更新；
+2. `openPwmChipFlow/loop_runs/openpwm-rtl2gds-0001/` 中的真实 run 记录。
 
-这些不是锦上添花，而是 Agent 能否被芯片工程师信任的核心。
+当前最终状态不是“全流程成功”，而是“RTL 仿真成功，后端阶段需要 Docker/OpenLane 工具环境”。这个表达虽然没有宣传味，但更接近芯片工程师能信任的状态。
