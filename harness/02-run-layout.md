@@ -12,6 +12,9 @@ runs/<goal_id>/<run_id>/
   tb/
   scripts/
   logs/
+  artifacts/
+    frontend/
+    backend/
   metadata/run.json
   reports/final.md
 ```
@@ -24,6 +27,8 @@ runs/<goal_id>/<run_id>/
 - `tb/`: simulation tests, reference models, and Makefiles.
 - `scripts/`: tool scripts such as Yosys `.ys` files.
 - `logs/`: raw stdout/stderr and tool reports.
+- `artifacts/frontend/`: lint, simulation, waveform, coverage, and synthesis-check outputs.
+- `artifacts/backend/`: synthesis, PnR, DRC/LVS, GDS, LEF, LIB, DEF, SPICE, SDF, and SPEF outputs.
 - `metadata/run.json`: machine-readable run record using `schemas/run.schema.json`.
 - `reports/final.md`: concise human final report.
 
@@ -40,6 +45,8 @@ Each command must record:
 - stdout log path;
 - stderr log path;
 - whether the command result is required for success.
+- execution target, such as local shell, container, remote CI, or cluster.
+- key environment inputs, such as PDK version, container image, and license/tool paths.
 
 ## Artifact Recording
 
@@ -77,8 +84,11 @@ Every required stage must record one explicit status:
 - `needs_tooling`;
 - `needs_review`;
 - `not_run`.
+- `needs_backend_execution_target`.
 
 `skipped`, `blocked`, and `needs_tooling` are not success states. A final report must not claim `passed` if any required stage is skipped or blocked.
+
+`needs_backend_execution_target` is also not a success state. It means the local agent can continue front-end work, but the requested backend flow needs a Linux/container/cluster target with OpenROAD, Magic, Netgen, KLayout, and the selected PDK.
 
 ## Evidence Consistency Rule
 
@@ -91,6 +101,8 @@ Before a run can pass, the harness must check:
 - stale artifacts vs. current run id;
 - requirement/spec contradictions;
 - whether every final claim links to an artifact or log.
+- PDK/tool path contamination in design configs;
+- PDK version consistency across config, `.magicrc`, logs, and final artifacts.
 
 ## Reproducibility Rule
 

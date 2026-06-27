@@ -8,7 +8,30 @@
     "path": { "type": "string", "minLength": 1 },
     "type": {
       "type": "string",
-      "enum": ["goal", "spec", "rtl", "testbench", "script", "log", "metadata", "report", "waveform", "other"]
+      "enum": [
+        "goal",
+        "spec",
+        "rtl",
+        "testbench",
+        "script",
+        "log",
+        "metadata",
+        "report",
+        "waveform",
+        "coverage",
+        "netlist",
+        "def",
+        "gds",
+        "lef",
+        "lib",
+        "spice",
+        "sdf",
+        "spef",
+        "drc_report",
+        "lvs_report",
+        "antenna_report",
+        "other"
+      ]
     },
     "stage": {
       "type": "string",

@@ -22,7 +22,7 @@
     "goal_id": { "type": "string", "minLength": 1 },
     "status": {
       "type": "string",
-      "enum": ["running", "passed", "failed", "blocked", "needs_review"]
+      "enum": ["running", "passed", "failed", "blocked", "needs_tooling", "needs_review", "needs_backend_execution_target"]
     },
     "started_at": { "type": "string" },
     "ended_at": { "type": ["string", "null"] },
@@ -48,7 +48,7 @@
           },
           "status": {
             "type": "string",
-            "enum": ["passed", "failed", "skipped", "blocked", "needs_tooling", "needs_review", "not_run"]
+            "enum": ["passed", "failed", "skipped", "blocked", "needs_tooling", "needs_review", "needs_backend_execution_target", "not_run"]
           },
           "required": { "type": "boolean" },
           "evidence": { "type": "array", "items": { "type": "string" } }

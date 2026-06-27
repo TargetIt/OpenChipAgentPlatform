@@ -167,6 +167,34 @@ status = passed
 
 对于芯片工程，`skipped` 是一个正式状态，必须传递到最终报告。
 
+## 4.6 Backend Execution Gate：后端目标必须明确
+
+芯片后端不是普通本地脚本。完整 RTL-to-GDS 目标必须明确后端执行目标：
+
+```text
+backend target:
+  type: local | container | remote_ci | cluster
+  os: linux
+  required tools: openlane, openroad, magic, netgen, klayout
+  pdk: process + version hash
+  mount paths: explicit and recorded
+```
+
+本地开发机可以承担前端 gate：
+
+- spec check；
+- RTL lint；
+- RTL simulation；
+- report consistency check。
+
+但如果本地缺少 OpenROAD/Magic/Netgen/PDK 或 license，就不能把后端阶段标成 passed。正确状态是：
+
+```text
+needs_backend_execution_target
+```
+
+`openPwmChipFlow` 的实战结果说明，macOS arm64 本地环境可以跑仿真和部分配置检查，但完整 Phase 3 到 Phase 6 最终需要 Linux/container runner 才可靠。
+
 ## 5. Evidence Loop：读取证据
 
 工具跑完后，Agent 要读结果：
@@ -207,6 +235,8 @@ log
 - 旧 artifact 是否被当成本次 run 结果；
 - requirement 与 design spec 是否冲突；
 - coverage/DRC/LVS/GDS 结论是否有对应原始报告。
+- PDK/tool 路径是否被硬编码进设计配置；
+- run metadata、OpenLane config、`.magicrc`、最终 artifact 是否指向同一个 PDK 版本。
 
 典型规则：
 
@@ -218,6 +248,10 @@ report has FAIL marker and ALL PASSED marker
 required stage skipped
   -> not passed
   -> needs_tooling or blocked
+
+design config hard-codes stale PDK_ROOT
+  -> environment_contamination
+  -> fix config before backend run
 
 requirements conflict with design spec
   -> spec_ambiguity

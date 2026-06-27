@@ -156,11 +156,23 @@ MVP 必须围绕这些风险设计，而不是只追求 demo 看起来很顺。
 - 报告内部矛盾；
 - 需求与规格冲突；
 - 端到端 flow 的阶段状态传播。
+- 本地前端 gate 和远端/container 后端 gate 的分层；
+- PDK_ROOT、工具路径、容器挂载路径等执行环境污染。
 
 所以 MVP 的最低要求不是“跑一个 testbench”，而是：
 
 ```text
 能可靠地区分 passed / failed / skipped / blocked / needs_review。
+```
+
+当 MVP 目标升级为完整 RTL-to-GDS 时，最低要求要追加：
+
+```text
+Phase 3 synthesis must produce reports/artifacts
+Phase 4 PnR must produce DEF/SDF/SPEF
+Phase 5 physical verification must show DRC/LVS/Antenna evidence
+Phase 6 delivery must produce readable GDS/LEF/LIB/SPICE
+all backend artifacts must belong to the current run id
 ```
 
 ## 第一版产品口号

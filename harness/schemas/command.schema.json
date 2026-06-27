@@ -28,6 +28,14 @@
     "exit_code": { "type": ["integer", "null"] },
     "stdout": { "type": "string" },
     "stderr": { "type": "string" },
-    "required_for_success": { "type": "boolean" }
+    "required_for_success": { "type": "boolean" },
+    "execution_target": {
+      "type": ["string", "null"],
+      "enum": ["local", "container", "remote_ci", "cluster", null]
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    }
   }
 }
